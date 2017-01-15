@@ -1,0 +1,53 @@
+<div class="row" ng-controller="ViewClientCtrl as vm">
+    <div class="col s12">
+        <ul class="tabs">
+            <li class="tab col s4"><a class="active" href="#test1">Баланс</a></li>
+            <li class="tab col s4"><a href="#test2">Меню</a></li>
+            <li class="tab col s4"><a href="#test3">Заказы</a></li>
+        </ul>
+    </div>
+    <div id="test1" class="col s10 offset-s1">
+        <p>Баланс счета: <b>{{vm.client.account}}</b></p>
+        <p><a class="btn" href="" ng-click="vm.addAccount(100)">Пополнить баланс на 100</a></p>
+    </div>
+    <div id="test2" class="col s10 offset-s1">
+        <div ng-repeat="dish in vm.dishes">
+            <b>{{dish.title}}</b>
+            <div class="card horizontal">
+                <div class="card-image">
+                    <img class="activator" style="width:300px;" src="{{dish.image}}">
+                </div>
+                <div class="card-stacked">
+                    <div class="card-content">
+                        <p><b>Инградиенты</b>:</p>
+                        <p ng-repeat="ingredient in dish.ingredients">{{ingredient}}</p>
+                    </div>
+                    <div class="card-action">
+                        <p>Цена: <b>{{dish.price}}</b>, Рейтинг: <b>{{dish.rating}}</b></p>
+                        <p><span ng-show='vm.client.account < dish.price' style='color:tomato;'>Пополните баланс на <b>{{dish.price-vm.account}}</b></span>
+                        </p>
+                        <p><a ng-show='vm.client.account > dish.price' class="btn" href="" ng-click="vm.doOrder(dish)">Заказать</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="test3" class="col s10 offset-s1">
+        <table class="striped bordered centered">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Блюдо</th>
+                <th>Статус</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="order in vm.orders">
+                <td>{{order.id}}</td>
+                <td>{{order.dish}}</td>
+                <td>{{order.status}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

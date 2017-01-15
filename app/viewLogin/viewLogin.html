@@ -1,0 +1,23 @@
+<div class="row" ng-controller="ViewLoginCtrl as vm">
+    <form class="col s12" role="form">
+        <div class="input-field col s12">
+            <input type="text"
+                   id="name"
+                   ng-model="vm.name"
+                   class="validate"
+                   required>
+            <label for="name">Укажите Имя</label>
+        </div>
+        <div class="input-field col s12">
+            <input type="email"
+                   id="email"
+                   ng-model="vm.email"
+                   class="validate"
+                   required>
+            <label for="email">Укажите Email</label>
+        </div>
+        <button class="btn waves-effect waves-light" type="button" ng-click="vm.doLogin()">Войти
+            <i class="material-icons right">send</i>
+        </button>
+    </form>
+</div>
