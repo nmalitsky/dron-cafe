@@ -11,9 +11,7 @@
             </div>
             <div class="nav-content">
                 <ul class="tabs" style="overflow-x:hidden; background-color: lightyellow;">
-                    <!--
                     <li class="tab col s4"><a class="active" href="#balanceTab">Баланс</a></li>
-                    -->
                     <li class="tab col s4"><a href="#orderTab">Заказы</a></li>
                     <li class="tab col s4"><a href="#menuTab">Меню</a></li>
                 </ul>
@@ -21,23 +19,17 @@
         </nav>
     </div>
 
-    <div id="balanceTab1" class="col s10 offset-s1">
+    <div id="balanceTab" class="col s10 offset-s1">
         <table>
             <tr style="margin-top: 20px;">
                 <td>Имя: <b>{{vm.client.name}}</b></td>
-            </tr>
-            <tr style="margin-top: 20px;">
                 <td>Баланс счета: <b>{{vm.client.account}}</b></td>
-            </tr>
-            <tr style="margin-top: 20px;">
                 <td>
                     <a class="btn tooltipped waves-effect waves-light"
                        data-position="right" data-delay="50" data-tooltip="Пополнить на 100 кредитов"
                        ng-click="vm.addAccountBalance(100)">Пополнить баланс
                     </a>
                 </td>
-            </tr>
-            <tr style="margin-top: 20px;">
                 <td>
                     <a class="btn waves-effect waves-light"
                        data-position="right" data-delay="50" data-tooltip="Выйти из системы"
@@ -47,7 +39,7 @@
             </tr>
         </table>
     </div>
-    <div id="menuTab" class="col s10 offset-s1" style="margin-left: 200px;">
+    <div id="menuTab" class="col s10 offset-s1">
         <div ng-repeat="dish in vm.dishes">
             <b>{{dish.title}}</b>
             <div class="card horizontal">
@@ -70,7 +62,7 @@
             </div>
         </div>
     </div>
-    <div id="orderTab" class="col s10 offset-s1"  style="margin-top: 50px;">
+    <div id="orderTab" class="col s10 offset-s1">
         <table class="striped bordered centered">
             <thead>
             <tr>

@@ -142,7 +142,7 @@ angular.module('myApp.viewClient', ['ngRoute'])
             $http.delete('/api/orders/' + order._id)
                 .then(function successCallback(response) { // response status code between 200 and 299
                     console.log("DELETE /api/orders, response.status: " + response.status);
-                    vm.addAccountBalance(order.price); // save account in DB
+                    vm.addAccountBalance(Number(order.price)); // save account in DB
                     Materialize.toast('Заказ отменен', 3000, 'rounded');
                 }, function errorCallback(response) {
                     Materialize.toast('Ошибка отмены заказа', 3000, 'rounded');
@@ -152,7 +152,7 @@ angular.module('myApp.viewClient', ['ngRoute'])
 
         vm.doReOrder = function(order, discount) {
 
-            let discount_price = Math.round(order.price * (100 - discount)/100);
+            let discount_price = Math.round(Number(order.price) * (100 - discount)/100);
 
             let params = {
                 orderedTime: new Date().getTime(),

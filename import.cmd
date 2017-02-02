@@ -1,1 +1,1 @@
-C:\MongoDB\3.4\bin\mongoimport --db droncafe --collection dish --file menu.json
+C:\MongoDB\3.4\bin\mongoimport --db droncafe2 --collection dish --file menu.json
