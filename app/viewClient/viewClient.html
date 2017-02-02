@@ -1,16 +1,53 @@
 <div class="row" ng-controller="ViewClientCtrl as vm">
-    <div class="col s12">
-        <ul class="tabs">
-            <li class="tab col s4"><a class="active" href="#test1">Баланс</a></li>
-            <li class="tab col s4"><a href="#test2">Меню</a></li>
-            <li class="tab col s4"><a href="#test3">Заказы</a></li>
-        </ul>
+
+    <div class="navbar-fixed" style="margin-bottom: 65px;">
+        <nav class="nav-extended">
+            <div class="nav-wrapper">
+                <span class="brand-logo right">DronCafe</span>
+                <ul id="nav-mobile" class="left hide-on-med-and-down">
+                    <li class="active" style="width: 100px;"><a href="#!/viewClient">Клиент</a></li>
+                    <li style="width: 100px;"><a href="#!/viewCook">Повар</a></li>
+                </ul>
+            </div>
+            <div class="nav-content">
+                <ul class="tabs" style="overflow-x:hidden; background-color: lightyellow;">
+                    <!--
+                    <li class="tab col s4"><a class="active" href="#balanceTab">Баланс</a></li>
+                    -->
+                    <li class="tab col s4"><a href="#orderTab">Заказы</a></li>
+                    <li class="tab col s4"><a href="#menuTab">Меню</a></li>
+                </ul>
+            </div>
+        </nav>
     </div>
-    <div id="test1" class="col s10 offset-s1">
-        <p>Баланс счета: <b>{{vm.client.account}}</b></p>
-        <p><a class="btn" href="" ng-click="vm.addAccount(100)">Пополнить баланс на 100</a></p>
+
+    <div id="balanceTab1" class="col s10 offset-s1">
+        <table>
+            <tr style="margin-top: 20px;">
+                <td>Имя: <b>{{vm.client.name}}</b></td>
+            </tr>
+            <tr style="margin-top: 20px;">
+                <td>Баланс счета: <b>{{vm.client.account}}</b></td>
+            </tr>
+            <tr style="margin-top: 20px;">
+                <td>
+                    <a class="btn tooltipped waves-effect waves-light"
+                       data-position="right" data-delay="50" data-tooltip="Пополнить на 100 кредитов"
+                       ng-click="vm.addAccountBalance(100)">Пополнить баланс
+                    </a>
+                </td>
+            </tr>
+            <tr style="margin-top: 20px;">
+                <td>
+                    <a class="btn waves-effect waves-light"
+                       data-position="right" data-delay="50" data-tooltip="Выйти из системы"
+                       ng-click="vm.doLogout()">Выйти
+                    </a>
+                </td>
+            </tr>
+        </table>
     </div>
-    <div id="test2" class="col s10 offset-s1">
+    <div id="menuTab" class="col s10 offset-s1" style="margin-left: 200px;">
         <div ng-repeat="dish in vm.dishes">
             <b>{{dish.title}}</b>
             <div class="card horizontal">
@@ -19,33 +56,43 @@
                 </div>
                 <div class="card-stacked">
                     <div class="card-content">
-                        <p><b>Инградиенты</b>:</p>
-                        <p ng-repeat="ingredient in dish.ingredients">{{ingredient}}</p>
+                        <p><b>Ингредиенты</b>:</p>
+                        <p ng-repeat="ingredient in dish.ingredients track by $index">{{ingredient}}</p>
                     </div>
                     <div class="card-action">
                         <p>Цена: <b>{{dish.price}}</b>, Рейтинг: <b>{{dish.rating}}</b></p>
                         <p><span ng-show='vm.client.account < dish.price' style='color:tomato;'>Пополните баланс на <b>{{dish.price-vm.account}}</b></span>
                         </p>
-                        <p><a ng-show='vm.client.account > dish.price' class="btn" href="" ng-click="vm.doOrder(dish)">Заказать</a></p>
+                        <p><a ng-show='vm.client.account > dish.price' class="btn" href="" ng-click="vm.doOrder(dish)">Заказать</a>
+                        </p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div id="test3" class="col s10 offset-s1">
+    <div id="orderTab" class="col s10 offset-s1"  style="margin-top: 50px;">
         <table class="striped bordered centered">
             <thead>
             <tr>
-                <th>ID</th>
                 <th>Блюдо</th>
+                <th>Прошло с момента заказа (сек.)</th>
                 <th>Статус</th>
+                <th></th>
             </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="order in vm.orders">
-                <td>{{order.id}}</td>
-                <td>{{order.dish}}</td>
-                <td>{{order.status}}</td>
+            <tr ng-repeat="order in vm.orders | orderBy:'-orderedTime'">
+                <td>{{order.dish.title}}</td>
+                <td>{{vm.orderedTimer[order._id]}}</td>
+                <td>{{vm.orderStatus[order.status]}}</td>
+                <td>
+                    <p ng-show="order.status=='broken'">
+                        <a class="btn" href="" data-position="right" data-delay="50" data-tooltip="Отменить заказ"
+                           ng-click="vm.deleteOrder(order)">Отменить</a></p>
+                    <p ng-show="order.status=='broken'">
+                        <a class="btn" href="" data-position="right" data-delay="50" data-tooltip="Повторить со скидкой 5%"
+                           ng-click="vm.doReOrder(order, 5)">Повторить</a></p>
+                </td>
             </tr>
             </tbody>
         </table>

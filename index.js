@@ -10,11 +10,11 @@ app.use(bodyParser.json());
 const port = process.env.PORT || 3000;
 
 let mongoose   = require('mongoose');
-mongoose.connect('mongodb://localhost:6565/droncafe'); // connect to users storage
+mongoose.connect('mongodb://localhost/droncafe'); // connect to users storage
 
 // middleware to use for all requests
 app.use((req, res, next) => {
-	console.log(req.url); // logged url
+	//console.log(req.url); // logged url
 	next();
 });
 

@@ -1,38 +1,60 @@
-  <div class="row" ng-controller="ViewCookCtrl as vm">
-    <div class="col s6">
+<div class="row" ng-controller="ViewCookCtrl as vm">
+
+    <div class="navbar-fixed" style="margin-bottom: 65px;">
+        <nav class="nav-extended">
+            <div class="nav-wrapper">
+                <span class="brand-logo right">DronCafe</span>
+                <ul id="nav-mobile" class="left hide-on-med-and-down">
+                    <li style="width: 100px;"><a href="#!/viewClient">Клиент</a></li>
+                    <li class="active" style="width: 100px;"><a href="#!/viewCook">Повар</a></li>
+                </ul>
+            </div>
+            <div class="nav-content">
+                <ul class="tabs" style="overflow-x:hidden; background-color: #F0F0F0;">
+                    <li class="tab col s6"><a class="active" href="#orderedTab">Заказанные блюда</a></li>
+                    <li class="tab col s6"><a href="#preparedTab">Готовящиеся блюда</a></li>
+                </ul>
+            </div>
+
+        </nav>
+    </div>
+
+    <div id="orderedTab" class="col s10 offset-s1">
         <table class="striped bordered centered">
             <thead>
             <tr>
-                <th>ID</th>
                 <th>Блюдо</th>
-                <th>Статус</th>
+                <th>Клиент</th>
+                <th></th>
             </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="order in vm.orders">
-                <td>{{order.id}}</td>
-                <td>{{order.dish}}</td>
-                <td>{{order.status}}</td>
+            <tr ng-repeat="order in vm.orders.ordered">
+                <td>{{order.dish.title}}</td>
+                <td>{{order.client_name}} ({{order.client_email}})</td>
+                <td><p><a class="btn" href="" ng-click="vm.setOrderStatus(order._id, 'prepared')">начать готовить</a></p></td>
             </tr>
             </tbody>
         </table>
     </div>
-    <div class="col s6">
+    <div id="preparedTab" class="col s10 offset-s1">
         <table class="striped bordered centered">
             <thead>
             <tr>
-                <th>ID</th>
                 <th>Блюдо</th>
-                <th>Статус</th>
+                <th>Клиент</th>
+                <th>Прошло с начала приготовления (сек.)</th>
+                <th></th>
             </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="order in vm.orders">
-                <td>{{order.id}}</td>
-                <td>{{order.dish}}</td>
-                <td>{{order.status}}</td>
+            <tr ng-repeat="order in vm.orders.prepared | orderBy:'-preparedTime'">
+                <td>{{order.dish.title}}</td>
+                <td>{{order.client_name}} ({{order.client_email}})</td>
+                <td>{{vm.preparedTimer[order._id]}}</td>
+                <td><p><a class="btn" href="" ng-click="vm.setOrderStatus(order._id, 'delivered')">готово</a></p></td>
             </tr>
             </tbody>
         </table>
     </div>
-  </div>
+</div>

@@ -1,5 +1,18 @@
 <div class="row" ng-controller="ViewLoginCtrl as vm">
-    <form class="col s12" role="form">
+
+    <div class="navbar-fixed">
+        <nav>
+            <div class="nav-wrapper">
+                <span class="brand-logo right">DronCafe</span>
+                <ul id="nav-mobile" class="left hide-on-med-and-down">
+                    <li class="active"><a href="#!/viewLogin">Клиент</a></li>
+                    <li><a href="#!/viewCook">Повар</a></li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+
+    <form name="authForm" class="col s12" role="form">
         <div class="input-field col s12">
             <input type="text"
                    id="name"
@@ -14,10 +27,10 @@
                    ng-model="vm.email"
                    class="validate"
                    required>
-            <label for="email">Укажите Email</label>
+            <label for="email" data-success="Валидный адрес" data-error="Невалидный адрес" data-success="right">Укажите Email</label>
         </div>
-        <button class="btn waves-effect waves-light" type="button" ng-click="vm.doLogin()">Войти
+        <submit class="btn waves-effect waves-light" type="submit" ng-click="vm.doLogin()">Войти
             <i class="material-icons right">send</i>
-        </button>
+        </submit>
     </form>
 </div>
