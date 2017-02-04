@@ -16,8 +16,6 @@ angular.module('myApp.viewClient', ['ngRoute'])
         }
 
         $(document).ready(function () {
-            // the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
-            $('.modal').modal();
             $('ul.tabs').tabs();
             $('.tooltipped').tooltip({delay: 50});
         });
@@ -103,7 +101,7 @@ angular.module('myApp.viewClient', ['ngRoute'])
             let params = {
                 name: vm.client.name,
                 email: vm.client.email,
-                account: vm.client.account + account
+                account: Number(vm.client.account) + account
             };
 
             $http.put('/api/clients/' + client_id, params)
@@ -130,7 +128,7 @@ angular.module('myApp.viewClient', ['ngRoute'])
                 .then(function successCallback(response) { // response status code between 200 and 299
                     console.log("POST /api/orders, response.status: " + response.status);
                     console.log(response.data);
-                    vm.addAccountBalance(-dish.price); // save account in DB
+                    vm.addAccountBalance(-Number(dish.price)); // save account in DB
                     Materialize.toast('Заказно блюдо: ' + dish.title, 3000, 'rounded');
                 }, function errorCallback(response) {
                     Materialize.toast('Ошибка создания заказа', 3000, 'rounded');
@@ -143,6 +141,7 @@ angular.module('myApp.viewClient', ['ngRoute'])
                 .then(function successCallback(response) { // response status code between 200 and 299
                     console.log("DELETE /api/orders, response.status: " + response.status);
                     vm.addAccountBalance(Number(order.price)); // save account in DB
+                    vm.getClientOrders();
                     Materialize.toast('Заказ отменен', 3000, 'rounded');
                 }, function errorCallback(response) {
                     Materialize.toast('Ошибка отмены заказа', 3000, 'rounded');
@@ -163,12 +162,13 @@ angular.module('myApp.viewClient', ['ngRoute'])
 
             $http.put('/api/orders/' + order._id, params)
                 .then(function successCallback(response) { // response status code between 200 and 299
-                    console.log("DELETE /api/orders, response.status: " + response.status);
-                    vm.addAccountBalance(-discount_price); // save account in DB and reload orders
+                    console.log("PUT /api/orders, response.status: " + response.status);
+                    vm.addAccountBalance(Number(order.price) - Number(discount_price)); // save account in DB and reload orders
+                    vm.getClientOrders();
                     Materialize.toast('Заказ подан повторно со скидкой ' + discount + "%", 3000, 'rounded');
                 }, function errorCallback(response) {
                     Materialize.toast('Ошибка подачи заказа', 3000, 'rounded');
-                    console.log("DELETE /api/orders, error.status: " + response.status);
+                    console.log("PUT /api/orders, error.status: " + response.status);
                 });
         };
 

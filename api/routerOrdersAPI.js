@@ -28,31 +28,39 @@ const removeOrder = function(order) {
         if (err) {
             console.log(err.message)
         } else {
+            if(order == null) return; // order remove by client from UI
+
+            // refund money to the client for broken order
             if (order['status'] == 'broken') {
-                Order.remove({_id: order['_id']}, (err) => {
+                refund = true;
+                Client.findOne({email: order.client_email}, (err, client) => {
                     if (err) {
-                        console.log(err.message)
+                        console.log(err);
                     } else {
-                        broadcastEvent('update_orders_client_' + order['client_email']);
                     }
+                    client['account'] = Number(client['account']) + Number(order.price); // refund money
+                    client.save((err) => {
+                        if (err) {
+                            console.log(err);
+                        } else {
+                            console.log("Refund money for client " + client['name'] + ', price = ' + order.price);
+                        }
+                    });
                 });
             }
-        }
-    });
-};
-
-const updateClientAccountBalanceAndOrders = function(order) {
-    Client.findOne({email: order.client_email}, (err, client) => {
-        if (err) {
-            console.log(err);
-        } else {
-            client['account'] = Number(client['account']) + Number(order.price); // refund money
-            client.save((err) => {
+            // delete order
+            Order.remove({_id: order['_id']}, (err) => {
                 if (err) {
-                    console.log(err);
+                    console.log(err.message)
                 } else {
-                    broadcastEvent('update_client_' + order['client_email']);
-                    setTimeout(removeOrder, 2 * 60 * 1000, order);
+                    if(refund) {
+                        console.log("remove order for client " + order['client_email'] + " with refund")
+                        broadcastEvent('update_client_' + order['client_email']);
+                    } else {
+                        console.log("remove order for client " + order['client_email'] + " without refund")
+                        broadcastEvent('update_orders_client_' + order['client_email']);
+                    }
+
                 }
             });
         }
@@ -154,7 +162,7 @@ routerOrdersAPI.route('/orders/:order_id')
                                             console.log(err.message);
                                         } else {
                                             broadcastEvent('update_orders_client_' + order['client_email']);
-                                            setTimeout(removeOrder, 2000, order);
+                                            setTimeout(removeOrder, 30 * 1000, order);
                                         }
                                     });
                                 })
@@ -164,8 +172,8 @@ routerOrdersAPI.route('/orders/:order_id')
                                         if(err) {
                                             console.log(err.message);
                                         } else {
-                                            // update ALL data for client (account balance and orders)
-                                            updateClientAccountBalanceAndOrders(order);
+                                            broadcastEvent('update_orders_client_' + order['client_email']);
+                                            setTimeout(removeOrder, 30 * 1000, order);
                                         }
                                     });
                                 });
